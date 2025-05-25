@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eu Te Amo</title>
+    <style>
+        body {
+            margin: 0;
+            background: black;
+            overflow: hidden;
+            color: crimson;
+            font-family: monospace;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+
+    <script>
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const fontSize = 18;
+        const columns = Math.floor(canvas.width / fontSize);
+        const drops = Array(columns).fill(0);
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = 'crimson';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = 'Eu te amo';
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 50);
+        document.addEventListener('click', function (e) {
+            const x = e.clientX;
+            const y = e.clientY;
+            const phrase = document.createElement('div');
+            phrase.textContent = 'Te amo';
+            phrase.style.position = 'absolute';
+            phrase.style.left = x + 'px';
+            phrase.style.top = y + 'px';
+            phrase.style.color = 'crimson';
+            phrase.style.fontWeight = 'bold';
+            phrase.style.fontSize = '20px';
+            phrase.style.pointerEvents = 'none';
+            phrase.style.fontFamily = 'monospace';
+
+            document.body.appendChild(phrase);
+
+            let opacity = 1;
+            const interval = setInterval(() => {
+                y -= 1;
+                opacity -= 0.02;
+                phrase.style.top = y + 'px';
+                phrase.style.opacity = opacity;
+                if (opacity <= 0) {
+                    clearInterval(interval);
+                    phrase.remove();
+                }
+            }, 16);
+        });
+    </script>
+</body>
+</html>
